@@ -1,0 +1,89 @@
+Today's topics
+
+Revision using code 
+Spring MVC flow 
+ModelAttributes
+ModelAndView
+
+
+
+New Topics : 
+Understand Model Map
+Handling request params in Spring MVC
+Spring MVC integration with Hibernate
+Objective List All Departments
+A diagram for steps n code together for complete understanding.
+
+Enter Spring Boot.
+Port existing web app to spring boot.
+Enter Spring Data JPA
+Solve Lab assignment
+use ems.ddl
+
+
+
+-------------------------------------------------
+Understood the efforts  of the extensive configuration ?
+
+Any solution : YES !
+
+1. Enter Spring Boot
+Readmes to refer 
+1."day13-data\day13_help\spring boot\spring-boot-steps.txt"
+2. "day13-data\day13_help\spring boot\Why n What is spring boot.txt"
+
+2. While Porting earlier app to spring boot 
+Any problems noticed ?
+Exception : org.hibernate.HibernateException
+Root cause : no curnt session configured!
+(i.e unable to get curnt session from SessionFactory , in the DAO layer)
+Reason : Spring boot  DOES NOT directly support native hibernate APIs
+(eg : org.hibernate : SessionFactory , Session, Transaction....)
+
+Soln : Replace Hibernate by it's specs : JPA (Java Persistence API)
+
+3. Replace hibernate native APIs by JPA
+Refer : "day13-data\day13_help\spring boot\diagrams\jpa-entitymgr-session-layers.png"
+Reference project : day13_boot
+
+4. BUT if you notice , in all DAO layers (JDBC / Hibernate / JPA) , you are solving common problems : CRUD 
+So is there any out of box (ready made) solution ?
+YES
+
+Enter Spring Data JPA
+Refer : "day13-data\day13_help\Spring Data JPA\regarding spring data JPA.txt"
+
+
+5. Test Model Map
+
+6. Handling Request parameters
+Use @RequestParam
+
+
+7. Use <c:url> or <spring:url> for creating context relative URLs as well as URL rewriting ) (needed in the absence of cookies)
+eg : 
+<spring:url var="abc" value="/emps/list"/>
+<form action="${abc}" method="post">
+....
+</form>
+After submitting the form --> 
+What will be the URL if cookies are not blocked ?
+http://host:port/ctx_path/emps/list
+
+What will be the URL if cookies are  blocked ?
+http://host:port/ctx_path/emps/list;jsessionid=dfgsdftrtr56846jghjd
+-----------------------
+http://localhost:8080/day13_boot/emps/list
+payload : deptId=1
+
+7. Solve the assignment
+(Continue with EMS)
+
+-------------------------
+Revise this (from Java SE api docs)
+
+java.util.Optional class Method
+public  T orElseThrow​(Supplier exceptionSupplier) throws Throwable
+If a value is present, returns the value, otherwise throws an exception produced by the exception supplying function.
+
+

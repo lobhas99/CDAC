@@ -1,0 +1,46 @@
+Hibernate manages  DB entities.
+
+The developer writes code to fetch the Object representation of this entity from the database.Hibernate returns an object and the client code is able to read whatever he needs to read from the object.
+But in case of load , the object that is returned to the client is not an instance of the domain object(Entity class).
+Instead it is a proxy object which is dynamically constructed by Hibernate by extending the domain class.
+
+Why would hibernate do that and not just return the domain object?
+
+Domain objects are at first glance a bunch of fields of primitive types like Integers and Strings. 
+
+But not all domain objects are so simple. Many of them have collections as member variables.
+
+ Now, these collections amount to rows stored in different tables. 
+
+Since these are rows of data, there is no real limit to how many such rows there could be in such a collection.Also, there could be multiple such collection member variables in the domain object.
+
+So,to give a clean  domain object back, hibernate would need to fetch the one row of data from the primary table along with thousand rows of collection rows from the first collection field and another thousand rows of collection rows from the second collection.And as these are related entities,the developer code might not even have been interested in those related entities at this point.There is a lot of DB work involved in pulling all that data through and you don’t want to doing all that work and having the user of the system of whose part this code is wait unnecessarily for the time it takes to fetch the collection when all the user really needs to know for his functioning is the name.
+
+Fetch strategy.What does it mean?
+
+Fetch strategy is applicable to a collection instance within a domain object.Fetch strategy is what dictates how the collection data should be fetched. The options to fetch as follows from the earlier discussion is whether to fetch the collection while fetching the entity instance or whether to fetch the collection at the point that the code tries to access the collection using a getter call on the collection member variable.
+
+Fetch strategy would also be specifiable through annotations.Is that correct?
+
+That is correct.There are two fetch strategies — Lazy and Eager. 
+Lazy is where the collection data is fetched first time the code attempts to do a getter on the collection. Eager is where the collection data is fetched immediately.
+Fetch strategy is not a separate annotation.Rather,it is an attribute of the  annotation.
+
+
+Why would some collections need to marked as EAGER and others as LAZY?
+Some of the collections are very central to the definition of the entity in that those collections as much define the entity as the main fields on the entity. It would make sense to fetch such collections eagerly and have those ready for the client code to use right away.This avoids the second round trip that needs to be done to the DB to fetch the collection data.
+
+What exactly does the Proxy object provide over the domain class?
+For the collection fields in the domain class,the domain class merely has plain getters and setters.The proxy class would have enhanced these getters to check whether the list already has data and if not fetch the data from the DB.
+
+Is there a way to prove that the object that is returned is a proxy and not the actual object?
+Yes.If the domain object has a lazy collection,after the domain object has been fetched using session.get(),close the session.Now,on running a getter on the collection,there would be an error indicating that the session has already been closed.The fact that a database connection was attempted indicates that this object is not the domain object as the domain object just has a return statement for the collection.
+
+How would things be different if the collection had been an EAGER collection?
+There would not have been a failure on the getter for the EAGER collection even after the session is closed.This is because the proxy already has the data for the collection and hence would not attempt to do a round trip at all and hence would not realize that the session is closed.
+
+
+
+
+
+

@@ -1,0 +1,163 @@
+Spring java docs links
+Link : https://docs.spring.io/spring-framework/docs/5.3.26/javadoc-api/
+Spring Data JPA Links (Bookmark them!)
+1. API Docs : https://docs.spring.io/spring-data/jpa/docs/2.7.14/api/
+2. Ref docs : https://docs.spring.io/spring-data/jpa/docs/2.7.14/reference/html/
+
+
+
+1. Regarding Swagger : 
+
+Standard testing n documentation tool for REST APIs : OAS (Open API specification n Swagger)
+
+OpenAPI Specification (OAS):
+
+The OAS, is an open standard(spec) for describing and documenting n testing RESTful APIs.
+
+It provides a machine-readable representation of an API, allowing developers to understand its endpoints, request/response data formats(payloads) , authentication methods etc.. 
+
+The specification is written in YAML(Yet Another Markup Language) or JSON format and serves as a contract between the API provider(REST server) n it's  consumer(REST clnt) 
+
+It is widely used in the industry to build, test, and consume APIs, supplying better communication and collaboration between development teams.
+
+Swagger:
+ Swagger is a collection of open-source tools(eg. swagger-ui) that support this specification and provide additional functionalities like API documentation and code generation.
+Swagger is an open-source set of tools built around the OpenAPI Specification.
+
+How to use ?
+ 
+1.1 Add swagger dependency in pom.xml
+(Already added in spring boot backend template project)
+<!-- Swagger UI -->
+		
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+
+1.2 From web browser , access swagger endpoint
+http://localhost:8080/swagger-ui/index.html
+
+
+
+ 
+As far as the RESTful API contents is concerned ,  we have already covered CRUD  n tested it with React App.
+So this much is MANDATORY for everyone.
+
+BUT if you develop the REST APIs , with this much only , i.e without ResponseEntity, proper validations , global exc handling , image handling , E-R , DTOs ,  the project won't be really impressive....
+
+
+
+Additional recommended sections start from here !
+1. Switch back to EMS 
+DB : ems2
+POJOs : BaseEntity (@MappedSuperclass
+(Entities : Department , Employee value type : AdhaarCard)
+
+Eclipse Project : day15_REST_advanced
+I have added  Lombok annotations.
+If it's still not working , replace it by earlier boiler plate code.
+In entities , if the property name is : joinDate , the Spring Data will automatically create a table with the column join_date (further reducing our efforts !)
+
+1.5 Run test cases
+Add depts 
+Add emps to depts
+
+
+2. Run from swagger :
+2.1 Get all departments (with def fetch type of one to many :lazy)
+Problem :
+org.springframework.http.converter.HttpMessageNotWritableException: Could not write JSON: failed to lazily initialize a collection of role: com.app.entities.Department.employees, could not initialize proxy - no Session;
+Solution : one --> many : with fetch=FetchType.EAGER
+
+2.2 Get all departments , with EAGER FETCH
+
+Problem : stack overflow !!!!! (recursion : bi dir asso between Dept 1<---->* Emp)
+Solution :
+
+
+2.3 
+Tell Jackson to ignore this property
+@JsonIgnore (Field level annotation)
+
+
+2.4 (Try this later !)
+Get All employees.
+
+Observation : You get the complete object graph 
+What if you don't want to send department details along with employee ?
+
+Or don't want to send AdhaarCard details always ?
+
+
+2.5 (Try this later !)
+While fetching emp details , null properties (eg : image) will also be sent
+
+How to exclude null or absent values ?
+You can add at the POJO class level ,
+@JsonInclude(Include.NON_EMPTY)
+
+
+2.6 . Now in your project requirement , if you want to send along with employee , the project details or some time dept details , how will you do it ?
+It starts getting so complex !
+
+So here comes simple , easy n  BEST solution
+
+IMPORTANT Project Tip : 
+ Typically , do not use entities as request or response payloads.
+i.e DO NOT expose your entities directly to the REST client
+
+eg : Instead of returning JSON representation of Employee , use DTO(Data transfer Object) pattern.
+Meaning : Use Entities only for persistence purpose.
+Use DTOs as request n resp data between REST client n Server.
+ 
+eg DepartmentRespDTO
+Decide n control what is it that you want to send as the response to REST client n add only those properties in the Response DTO.
+
+In the request payload decide , what is it that you need from REST client n only that in 
+Request DTO
+
+3. Project Tip
+In order to automatically  convert Entity <-----> DTO , there are multiple 3rd party libraries.
+eg : MapStruct , ModelMapper ...
+Using ModelMapper here. 
+Refer : "day15_help\Regarding ModelMapper.txt"
+
+3.1 Look at : 
+com.app.dto.DepartmentRespDTO
+
+3.2 Modify Service Layer to return List of DTOs
+Hint : Use ModelMapper's map method (entity--> DTO)
+Use Stream API : map n collect
+
+
+3.3 Look at : 
+com.app.dto.EmployeeRespDTO
+
+
+4. What will be easier to parse from React front end , a string or JSON ? 
+Project tip :
+Better Practice : Instead of sending a plain string message to the REST clnt , wrap it in the java object (eg : ApiResponse) n send it to front end
+
+5.1 ApiResponse : DTO pattern (Data transfer object  : to be used as payloads between clnt n server)
+Test it .
+Add it in delete emp details end point n test it.
+
+
+6. NOTE : SC (using Jackson=Spring boot's default vendor for marshalling n un marshalling support)
+It uses :
+getters : During serialization(=marshalling , java---> json)
+setters : During de-serialization (=un marshalling , json --> java)
+To customize ser n de-ser props
+@JsonProperty : Jackson annotation
+eg : @JsonProperty(value="mesg")
+private String message;
+
+Default  access : read(getter) n write(setter)
+If you want to ONLY de serialize a property(eg : password) but don't want to send it during ser.
+How to control the property/field access during ser/de-serial
+@JsonProperty(access = Access.WRITE_ONLY) : property/field will be ignored during serialization (used only during de-ser.)
+@JsonProperty(access = Access.READ_ONLY) :  property/field will be ignored during de serialization (used only during ser.)
+
+

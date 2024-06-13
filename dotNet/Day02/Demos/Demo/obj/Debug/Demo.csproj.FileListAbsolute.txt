@@ -1,0 +1,7 @@
+D:\Study Material\CDAC\dotNet\Day02\Demos\Demo\bin\Debug\Demo.exe.config
+D:\Study Material\CDAC\dotNet\Day02\Demos\Demo\bin\Debug\Demo.exe
+D:\Study Material\CDAC\dotNet\Day02\Demos\Demo\bin\Debug\Demo.pdb
+D:\Study Material\CDAC\dotNet\Day02\Demos\Demo\obj\Debug\Demo.csproj.AssemblyReference.cache
+D:\Study Material\CDAC\dotNet\Day02\Demos\Demo\obj\Debug\Demo.csproj.CoreCompileInputs.cache
+D:\Study Material\CDAC\dotNet\Day02\Demos\Demo\obj\Debug\Demo.exe
+D:\Study Material\CDAC\dotNet\Day02\Demos\Demo\obj\Debug\Demo.pdb

@@ -1,0 +1,43 @@
+﻿<html>
+    <head>
+        <title>Create Record</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    </head>
+    <body>
+      <form action="/Home/AfterCreate"  method="post">
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Name</td>
+                        <td>
+                            <input type="text" name="Name" required />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Address</td>
+                        <td>
+                            <input type="text" name="Address"  required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input type="submit" value="Add Record" name="btnAddRecord" />
+                        </td>
+                    </tr>
+
+                  @*   <tr>
+                        <td colspan="2">
+                            <input type="text" name="DeptName" />
+                        </td>
+                    </tr> *@
+                </table>
+            </div>
+        </div>
+      </form>
+    </body>
+</html>

@@ -1,0 +1,77 @@
+Exam objectives
+
+1. Spring boot Thymeleaf
+
+2. I18N
+
+3. RestTemplate
+
+4. Continue with Spring security
+4.1 Revise Spring security flow with diagrams.
+4.2 In mem authentication
+4.3 DB based authentication
+Add Dao test case to populate users.
+Add User Service for user signup
+Add UserController : for signup
+4.4 In sec config class : 
+Disable CSRF
+Permit all : "/users/signup", "/swagger-ui/**", "/v*/api-docs/**"
+
+4.4 Continue to JWT based authentication
+
+JSON Web Tokens (JWT) have become a popular method (Industry standard) for securing modern web applications, especially  RESTful web services.
+
+ JWTs allow you to transmit information securely between parties as a compact, self-contained, and digitally signed JSON object.
+
+Steps overview
+1. Copy from the earlier project
+(User signup same as earlier)
+
+2. Add new end point in UserController , for signin
+
+request payload : 	Auth req DTO : email n password
+resp payload : In case of success : Auth Resp DTO : mesg + JWT token + SC 200
+IN case of failure : SC 401
+
+
+3. For JWT creation 
+3.1 Copy JWT properties (secret key n expiration time in msec) in application.properties file
+Generate secret key : https://generate-random.org/encryption-key-generator
+
+3.2 Copy JWT Utils class
+Contains Methods for : 
+Token generation
+Validation
+Extracting the claims : email (username : subject) n authorities
+
+4. Test User sign in endpoint (on swagger /postman) to confirm token generation
+
+5. Any time client tries to access , any secured end point : 
+REST client has to add a Bearer Token in request Header : Authorization
+(Confirm with Postman : choose Auth : Bearer Token)
+
+To intercept any request , to check for the token :
+Add custom filter : JWT custom filter  (extending from OncePerRequestFilter)
+5.1 Check for authorization header 
+If it's not null n starting with Bearer : extract token
+5.2 Validate the token
+5.3 In case of successful validation 
+extract claims : username/email (subject of the token claims)
+n extract authorities
+5.4 Wrap user details (username/email +granted authorities ) in the :  UsernamePasswordAuthenticationToken (imple of Authentication)
+5.5 Save above Authentication object in the spring sec ctx holder
+
+5.6 Continue with filter chain : doFilter
+
+6. To change the session config policy to stateless n add custom filter before : UsernamePasswordAuthenticationFilter 
+copy sec config  class 
+
+7. Test accessing secure end points
+
+
+
+
+
+
+
+		

@@ -1,0 +1,45 @@
+Day 5
+1. import day5.1 , into your existing workspace , to revise basic JSP syntax
+1.1 Run it with and without cookies
+
+2. Solve JSP assignment.
+2.1 Basic JSP assignment with Request Dispatching(forward)
+2.2 Student admission assignment (w/o DB)
+
+
+Day 6
+1. import day6.1 ,  into your existing workspace , to revise  (visit the links from index.jsp)
+1.1 Error Handling in JSP
+1.2 JSP standard actions : forward , include , param
+
+2. import day6.2 ,  into your existing workspace , to revise : JSP -JavaBean --DAO --POJO --DB
+layers
+
+3. With lab faculty help (They will give detailed instructions)
+MUST import test_hibernat_basic , in your workspace.
+This will download hibernate dependencies , which will required on Monday.
+
+4. Hands on :
+Continue with day6.2.
+In login.jsp , add a link for new voter registration.
+
+4.1 Render voter registration form (voter_registration.jsp)
+4.2 Submit the form to process_reg.jsp
+Using Java Bean , perform the validation
+Voter age > 21. 
+In case of successful validation , User Bean should call User dao's method to insert a record.
+
+4.3 Display registration status from JSP.
+
+
+Day 7
+1. import test_hibernate_basic in your workspace (if not done already) n download hibernate dependencies.
+
+Hands on 
+2. Refer to "day7-data\day7_help\IPL sql.txt"
+Refer to teams table .
+WE will create a standalone demo to create n insert teams records.
+
+3. Complete Voter registration
+
+4. If already done , start with voter flow.

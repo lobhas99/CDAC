@@ -1,0 +1,436 @@
+Day 5
+1. import day5.1 , into your existing workspace , to revise basic JSP syntax
+1.1 Run it with and without cookies
+
+2. Solve JSP assignment.
+2.1 Basic JSP assignment with Request Dispatching(forward)
+2.2 Student admission assignment (w/o DB)
+
+
+Day 6
+1. import day6.1 ,  into your existing workspace , to revise  (visit the links from index.jsp)
+1.1 Error Handling in JSP
+1.2 JSP standard actions : forward , include , param
+
+2. import day6.2 ,  into your existing workspace , to revise : JSP -JavaBean --DAO --POJO --DB
+layers
+
+3. With lab faculty help (They will give detailed instructions)
+MUST import test_hibernat_basic , in your workspace.
+This will download hibernate dependencies , which will required on Monday.
+
+4. Hands on :
+Continue with day6.2.
+In login.jsp , add a link for new voter registration.
+
+4.1 Render voter registration form (voter_registration.jsp)
+4.2 Submit the form to process_reg.jsp
+Using Java Bean , perform the validation
+Voter age > 21. 
+In case of successful validation , User Bean should call User dao's method to insert a record.
+
+4.3 Display registration status from JSP.
+
+
+Day 7
+1. import test_hibernate_basic in your workspace (if not done already) n download hibernate dependencies.
+
+Hands on 
+2. Refer to "day7-data\day7_help\IPL sql.txt"
+Refer to teams table .
+WE will create a standalone demo to create n insert teams records.
+
+3. Complete Voter registration
+
+4. If already done , start with voter flow.
+
+
+Day 8
+
+1. Copy day8_hibernate project in your workspace. Import it as existing Maven Project
+Edit DB password , from hibernate.cfg.xml
+1.1 Open com.app.tester
+Go through the testers , to revise today's work.
+You can go through Tester n trace DAO method invocations
+
+2. Hands on
+
+2.1 Continue with day7_lab (where you already have Team POJO n DAO)
+Insert some IPL teams (using AddNewTeam tester)
+
+Solve these objectives
+1. Display  team id n abbreviation of all the teams
+ no inputs required
+
+
+2. Display team detailsby specified team id
+i/p : team id
+o/p : team details or null
+
+3. Display all those teams who need , player's max age < specific age n min no of wickets taken > specified wickets. Sort the results as per desc order of max age
+i/p : age , no of wickets
+
+4. Update max age n batting avg requirement of a specific team by it's name (team name is unique)
+i/p team name , new max age n batting avg
+
+
+5. Delete team details
+i/p : team id
+
+
+Day 9
+1. Integrate hibernate in a web app n start with IPL assignment
+
+
+Day 10
+0.Continue with day9_lab work.
+
+1. We will first complete IPL assignment n then revise
+1.1 What is already completed on Day 9?
+Lifted team id n abbreviations of all teams from Team Dao layer --> sent it to Java Bean (TeamBean)--> sent it to JSP --> add_player_form.jsp
+Displayed it using dyn drop down list in a form.
+eg : 
+${sessionScope.team_bean.teamDetails}
+
+
+1.2 User will choose a team , fill up player details n submit the form.
+URL ---> http://host:port/ctx_path/process_form.jsp
+
+What will be the next step ?
+
+In process_form.jsp :
+1.3 Create instance of  Player bean , <jsp:useBean> n store under session scope. (OR still better create TeamBean n  PlayerBean instance in index.jsp itself)
+1.4 Invoke matching setters
+<jsp:setProperty>
+1.5 Invoke PlayerBean's B.L method to validate n insert player details
+eg : ${sessionScope.player.validateAndAddPlayer()}
+
+2. In Player Bean : 
+2.1 props : teamId : int ,fn,ln:string,dob:String,avg:double,wickets:int
++ PlayerDao , TeamDao
+2.2 Bean Def ctor : create player dao instance , team dao instance
+
+2.3 generate getters n setters
+
+2.4 Add B.L method for validation n insertion
+public String validateAndAddPlayer()
+{
+ 1. Get team details from team id : simply call team dao's method n get team details
+Team chosenTeam=teamDao.getTeamDetails(teamId);
+2. validations 
+LocalDate date=....
+  int age=Period.between(date,LocalDate.now()).getYears();
+  batting avg 
+  wickets taken 
+  In case of no validation errs : 
+  simply call PlayerDao 's method to insert new player's details 
+  method args : teamId , transient player object ref.
+  rets : message
+}
+
+
+3. Team Dao 
+Team getSelectedTeamDetails(Integer teamId)
+Hint : session.get(...)
+
+4. PlayerDao
+String addPlayerDetails(Integer teamId,Player newPlayer)
+Hint : session.get(...) --> Team --null --ret failure mesg
+team.addPlayer(player) 
+commit
+
+2. Copy n import day10.1 in your workspace , as existing Maven project.
+
+It has a demo of all E-Rs n also Entity-value Types.
+It will be extremely confusing if you try to revise all of it on the same day.
+So here's a suggestion.
+
+Revise :  one to one mapping (uni dir shared PK approach)
+n try to solve this.
+1. Assign emp address
+i/p : emp id n address details
+Hint : AddressDao  
+session.get/load --> Address entity /proxy
+adr.setMyEmp(emp);
+session.persist(adr);
+commit
+
+2. Display emp address (lab work)
+
+i/p : emp id
+AddressDao
+Hint : session.get(Address.class,empId);
+
+
+3. Display all emp details from specified city
+i/p : city
+AddressDao
+jpql=select a.myEmp from Address a where a.city=:city
+
+
+Day 11
+1. Copy n import day11 projects in your workspace,
+To revise 
+1.1 Spring bean life cycle
+1.2 Setter based D.I
+1.3 Constructor based D.I
+1.4 Factory method based D.I
+
+
+Hands on
+
+SC starts up
+only : soap bean 
+
+After 2 demands(made from the TestSpring)
+my_atm:1  ---- http :1 
+my_atm :2 ---- http : 2 
+
+2. Hands on 
+In our ATM scenario : 
+Dependent Object : ATM Impl
+Dependency : Transport layer.
+
+Can 1 dependent object depend upon more dependencies ? YES
+ Transport layer (already exists !)
+Additional Dependencies :
+ATM depends upon : cash component (long) . 
+After any funds related operation , you have to inform bank n notify the customer.
+
+
+1. cash : double/long
+2. CustomerNotification Service (dependency i/f)
+Add a method : public void alertCustomer(String mesg);
+Implementations : EmailBased notification , Sms based notification
+(Actual B.L is NOT expected . Just print the messages)
+
+Wire cash component : using Constructor based DI (since it's MANDATORY : REQUIRED dependency of the ATM)
+
+Wire : CustomerNotification Service using setter based DI
+
+Test it out !
+cash : 12345678
+transport : http
+email based notification
+
+
+3. Auto wiring (implicit wiring using xml based configuration)
+
+4. If time permits :
+Add uni dir association , using shared PK approach , between : 
+TeamOwner 1<---1 Team 
+as discussed in the class.
+
+Solve
+4.1 Add new owner
+(first name ,last name , email : unique)
+4.2 Assign team to the owner.
+4.3 Display specific owner details
+
+Day 12
+
+Full hands on in the labs 
+As per the steps n flow discussed , complete these objectives
+
+1. Copy n import spring_mvc_template
+2. Deliver/render the index.jsp from SC (using spring MVC architecture)
+(Write Home page controller , as shown)
+
+3. Add a link in index.jsp
+<h5>
+		<a href="check/display">Test Me</a>
+</h5>
+
+When client clicks on the link ,
+This request should be routed through : DispatcherServlet , HandlerMapping , Handler,ViewResolver n JSP
+
+O/P 
+Display server side date n time.
+Display visit count
+(It should start with 1 n then increment as per client requests)
+
+Day 13
+1. Copy n import day13.2 in your workspace .
+
+Force update maven project.
+Edit DB password from <resources>/application.properties file
+Revise day13.2 completely
+1.1 Spring Boot 
+1.2 Spring Data JPA (intro)
+
+OR 
+
+Steps are in "Day13-data\day13_help\spring boot\spring-boot-steps.txt"
+you can create spring boot project from Spring starter project (from scratch)
+Choose dependencies. 
+From pom.xml , change spring boot version to 2.7.18 n JDK version to 11
+Force update. 
+
+First approach will be faster. 
+
+
+2.  Hands on
+ Refer to : day13_data\day13_help\EMS assignment.png
+In 1st half we will continue with the same case study.
+
+In 2nd half : try IPL .
+
+Refer to "Day13-data\day13_help\lab assignment.png" (IPL case study)
+
+You will need extra help n hints . It's provided in "Day13-data\day13_help\readmes\Spring MVC Details.txt"
+
+We will discuss it whenever required.
+
+3. Refer day13_spring_mvc : revision of only Spring MVC
+
+4. Refer day13_spring_mvc_hibernate : revision of only Spring MVC n hibernate (w/o Spring boot)
+
+5. Refer day13_boot : Spring boot project created from scratch.
+
+
+Day 14
+Important : 
+At the end of the lab session ,
+1. Copy n import "Template Projects\spring_boot_backend_template".
+Force update Maven Project 
+2. npm install Template Projects\React Frontend App
+3. npm start
+(Check if react app is running fine in the browser)
+
+
+1. Copy n import day14.1 in your workspace .
+
+Force update maven project.
+Edit DB password from <resources>/application.properties file
+Revise day14.1 completely
+(Especially for : add new employee n logout features)
+
+
+2. Will try as many as we can complete in the first half of the lab session.
+Add Login page ,n  role based authorization 
+If user is logged in as "manager" --redirect the clnt to dept list page.
+If user is logged in as "emp" --redirect the clnt to emp details page (where he/she can link adhaar card , address details n logout)
+
+Optional Requirements :
+2.1 Link Adhaar Card Details
+2.2 Assign Emp address.
+2.3 Display all emps by specified city.
+AddressDao
+List<Address> findByCity(String city);
+
+OR
+@Query("select a.emp from Address a where a.city=:ci")
+List<Emp> findByCity(@Param("ci")String city);
+
+Day 15
+1. Hands on .
+Create  a backend project based on RESTful web service
+(using spring boot backend template) 
+Copy n import : spring boot backend template
+
+Create Product based solution
+Product attributes 
+id (inherited from BaseEntity : Long) , name (unique) , description ,category(enum) , price , available stock(int),expiryDate:LocalDate
+
+Create end points for CRUD
+Details will be discussed later.
+1. Entity Layer
+2. DAO
+3. Service
+4. ProductController
+
+5. (Write a test case to fill up products)
+API end points 
+5.1 Get all products
+http://localhost:8080/products
+Method : GET
+
+5.2 Add new product
+http://localhost:8080/products
+method : POST
+
+5.3 Get Product by it's id
+http://localhost:8080/products/{productId}
+Method : GET
+
+5.4 Get Products by it's category
+http://localhost:8080/products/category/{categoryName}
+Method : GET
+Hint : List<Product> findByCategory(Category cat)
+
+5.5 Update product details
+http://localhost:8080/products
+Method : PUT
+
+5.6 Delete Product details
+http://localhost:8080/products/{productId}
+Method : DELETE
+
+
+
+6. If time permits ,
+we will replace 5.3 's response by a Product DTO
+
+
+Day 16
+1. Copy n import : Maven Project : day16_REST_advanced
+Edit password
+drop database ems2
+Run test cases : dept dao test n emp dao test
+
+2. Solve : (as lab exam objective)
+
+2.1 Add new employee with dept id 
+i/p : dept id n core emp details
+o/p : core emp details with emp id
+
+2.2 URL : http://host:port/employees/{deptId} , method=POST
+request payload : Employee DTO 
+
+2.3 Validation rules 
+dept id can not be null
+emp email must be valid min len=5 max len=20 (@Length)
+password : alphanumeric n strong(special characters)
+salary : min salary : 20000 max sal : 200000
+join date : must be a future date
+
+2.4 response : success --SC 201 , emp resp DTO (containing core emp details+emp id)
+resp : validation error : SC 400 n map of field errors
+B.L failure (eg : invalid dept id ) --SC 500, Api Resp DTO , containing suitable err mesg.
+
+
+
+3. Discuss image handling
+
+4. pagination demo
+
+5. Solve
+Use Case: Healthcare Appointment System
+Description:
+Develop RESTful services for managing appointments in a healthcare system. Users should be able to schedule appointments, view their upcoming appointments, and cancel appointments.
+
+Endpoints:
+1.	Create Appointment:
+	Endpoint: POST /appointments
+	Request: Schedule a new appointment by providing details like patient name, doctor, date, and time.
+	Response: Return the confirmation of the scheduled appointment.
+
+2.	Get Upcoming Appointments:
+	Endpoint: GET /appointments/{doctorId}/upcoming
+	Request: Retrieve a list of upcoming appointments for a specific doctor
+	Response: Return the details of upcoming appointments in JSON format.
+
+3.	Cancel Appointment:
+	Endpoint: DELETE /appointments/{appointmentId}
+	Request: Cancel a scheduled appointment by providing its unique identifier.
+	Response: Return a success message or confirmation of the canceled appointment.
+
+Notes:
+	Response codes should be as per REST guidelines.
+	Error handling in case of failures.
+	There should not be conflicting appointments, for example – more than one appointment with 	same doctor on same date & time.
+	
+
+
+
+

@@ -1,0 +1,285 @@
+Revise : 
+Hibernate Architecture (Important blocks)
+Layers in Hibernate 
+POJO Annotations
+Hibernate based DAO Layer
+
+New Topics :
+POJO state transitions
+Hibernate Session API for CRUD n searching(JPQL)
+Session level cache n dirty checking
+
+
+Basic cleaning instructions(If required)
+Copy the Maven project under your workspace
+Import "test_basic_hibernate" , as existing Maven project , in your workspace
+Then Force update maven project , Maven clean n project clean
+This should download hibernate dependencies.
+
+If above doesn't work 
+R click on project --Run as --Maven Build --Goals : clean install
+
+If this doesn't work :
+Exit from STS(IDE)
+Delete <repository> from under .m2
+Re enter IDE.
+Then Force update maven project , Maven clean n project clean
+This should download hibernate dependencies.
+
+
+Hibernate architecture
+1. Name n describe important blocks 
+1.1 Session : i/f 
+Represents persistence mgr
+Implicitly Associated with : L1 cache n a wrapper around pooled out db cn
+short lived ,light weight,mutable , need not apply thrd safety , created one per demand
+methods : save , get , update .....
+
+1.2 SF : provider of Session
+Represents DBCP
+Explicitly Asso :  L2 cache
+long lived ,heavy weight,immutable,inherently thrd safe, singleton per app per DB
+
+
+1.3Configuration : org.hibernate.cfg : class
+provider of SF
+
+
+2. Programming Steps in building hibernate based application
+ 
+2.1 Hibernate Utils
+static init block : 
+factory=new Configuration().configure().buildSessionFactory();
+
+2.2 Create a POJO
+POJO annotations (JPA : javax.persistence)
+Mandatory 
+1. To tell hibernate , following class is an entity (typicaly have separate DB table , it's own PK) , manage it's life cycle
+@Entity
+
+
+2. PK (field level)
+@Id
+
+Till hibernate 5.x : what should be the data type of the ID property ?
+It should imple. Serializable i/f
+eg : int-->Integer --> Serializable
+Suggestion : ID property : explictly Serializable (eg : Integer / Long)
+
+3. Optional BUT reco annotations
+@Table
+@GeneratedValue(strategy=GenerationType.IDENTITY) => auto increment
+@Column -- length,nullable,unique,name
+@Transient
+@Enumerated(EnumType.STRING)
+@Temporal
+
+2.3 After creating a new entity : add it's mapping entry in hib cfg xml
+<mapping class="com.app.pojos.Employee"/>
+
+
+2.4 
+DAO layer :
+i/f : method declarations
+implementation  class
+CRUD method
+1. get session from SF (openSession)
+2. begin tx (session.beginTransaction)
+3. try { 
+  CRUD work : Serializable id=session.save(Object ref);
+  tx.commit();
+} catch (RuntimeException e)
+{
+  rollback tx;
+  throw e;
+} finally {
+   close session
+}
+-------------------------Revision over-------------------------------
+1. SessionFactory API
+openSession vs getCurrentSession
+
+2. Hibernate Internals
+
+What does hibernate perform upon commit ? 
+Hibernate performs auto dirty checking upon commit
+eg :
+session.save(ref); 
+tx.commit(); 
+1. session.flush() --> Checks the state of L1 cache with DB
+--> Finds new persistent entity in L1 cache --> fires DML (insert) , to sync state of L1 cache with DB
+2. session.close() --> L1 cache is destroyed n pooled out DB cn rets to the pool (so that the same connection can be REUSED to service any other request. With the lesser no db cns , it can service larger no of clnts => increases the scalabilty of the app)
+
+OR in catch clause : 
+
+ tx.rollback() --> no auto dirty chking --> session.close() 
+ L1 cache is destroyed n pooled out DB cn rets to the pool
+
+
+Refer to Hibernate Session API 
+(hibernate api-docs & readme : hibernate session api)
+
+
+Objectives : 
+
+1. Add a breakpoint before commit , observe n conclude.
+
+Understand POJO states
+(transient , persistent , detached.)
+
+2. Objective : Get emp details
+I/P : emp id
+O/P : emp details or error 
+
+3. Confirm L1 cache
+by invoking session.get(...) multiple times.
+
+
+4. Objective : Display all emp details
+
+Can you solve it using session.get ? : NO
+
+4.1 Solve it using HQL(Hibernate specific query language)/JPQL (Java Persistence Query Language)
+
+What is it ?
+Object oriented query language, where table names are replaced by POJO class names & column names are replaced by POJO property names, in case sensitive manner.
+
+sql : select * from emps
+HQL : from Employee
+JPQL : select e from Employee e
+e : POJO alias(ref)
+
+4.2. Create Query Object --- from Session i/f
+<T> org.hibernate.query.Query<T> createQuery(String jpql/hql,Class<T> resultType)
+T --result type.
+
+4.3. To execute query
+Query i/f method
+public List<T> getResultList() throws HibernateException
+--Rets list containing PERSISTENT entities.
+
+4.4. To get Stream of Results 
+Query i/f method
+public Stream<T> getResultStream() throws HibernateException
+--Rets Stream<T> containing PERSISTENT entities.
+
+4.5 Method of Query i/f
+<T> T getSingleResult()
+Executes a SELECT query that returns a single  result.
+Returns: Returns a single instance(persistent) that matches the query.
+Throws:
+    NoResultException - if there is no result
+    NonUniqueResultException - if more than one result
+    IllegalStateException - if called for a JPQL  UPDATE or DELETE statement
+
+
+
+
+
+5. Objective :Display all employees joined within date range n drawing sal > specific salary
+
+eg : sql = select * from emps where join_date between ? and ? and salary > ?
+jpql =select e from Employee e where e.joinDate between :start and :end and e.salary > :minSal
+
+Passing named  IN params to the query
+Query i/f method
+public Query<T> setParameter(String paramName,Object value) throws HibernateException.
+
+6. Emp Login (Lab work)
+i/p : email n password
+o/p Emp details with success mesg or invalid login mesg
+
+
+7. Objective : Display all emp last names of a specific employment type
+
+jpql =select e.lastName from Employee e where e.empType=:type
+
+
+8. Objective : Display all emps  first n last names n salary ,  of a specific employment type
+
+i/p : emp type
+
+String jpql =...
+
+
+
+List<Object[]> list=session.createQuery(jpql,Object[].class).setParameter(...).getResultList();
+In Tester : 
+list.forEach(o -> sop(o[0]+" "+o[1]+"  "+o[2]));
+OR
+To get a projection (=selected no of columns : props) using JPQL 
+Simpler solution :  use a JPQL constructor expression
+Pre requisite : MATCHING constructor MUST exist in POJO class
+eg :
+jpql = "select new com.app.pojos.Employee(firstName,lastName,salary) from Employee e where e.empType=:type
+
+9. Update 
+Objective : To understand PERSITENT vs DETACHED (auto dirty checking)
+1. Update salary of the emp
+i/p --email , sal increment
+o/p : mesg indicating success or a failure
+Steps : jpql --> session.createQuery(...).setParam(...)).getSingleResult();
+
+
+
+10. Increment salaries of all emps joined before a specific date.
+
+
+
+
+
+eg : list.forEach(e -> e.setSalary(...));
+OR 
+In case bulk updations 
+1. use update JPQL
+2. Execute DML using Query i/f method
+public int executeUpdate() throws HibernateException
+Rets row count.
+
+In case of update / delete , use
+session.createQuery(String update/deleteJpql) throws HibernateException
+i/p -- discount amt, reg date
+String jpql="update User u set u.regAmount=u.regAmount-:disc where u.regDate < :dt";
+
+10.1 Session API
+public Query<T> createQuery(String jpql) throws HibernateException
+jpql -- DML
+
+10.2 Query API
+public int executeUpdate() throws HibernateException
+--use case --DML
+
+
+
+11.Delete emp details
+i/p emp id
+o/p mesg indicating emp details removed from DB
+Hint : Session API : 
+12. Lab work
+Objective --delete emp details of a particular type
+via Bulk delete
+String jpql="delete from Employee e where e.empType=:ty"
+
+---------------Pending ---------------
+
+
+
+13. Save n restore images to / from DB
+FileUtils from Apache commons-io
+<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+Methods 
+
+1. public static byte[] readFileToByteArray(File file)
+                                  throws IOException
+Reads the contents of a file into a byte array. The file is always closed.
+
+2. public static void writeByteArrayToFile(File file,
+                        byte[] data)
+                                 throws IOException
+Writes a byte array to a file creating the file if it does not exist.
+

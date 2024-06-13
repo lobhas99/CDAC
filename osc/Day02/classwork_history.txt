@@ -1,0 +1,97 @@
+kill
+kill -l
+ps -e
+cat > numbers.txt
+cat numbers.txt
+cat -n numbers.txt
+head numbers.txt 
+tail numbers.txt 
+head -7 numbers.txt 
+tail -4 numbers.txt 
+sort numbers.txt 
+sort -n numbers.txt 
+uniq numbers.txt 
+sort numbers.txt 
+cat numbers.txt 
+sort numbers.txt 
+sort numbers.txt > sorted.txt
+ls
+cat sorted.txt 
+uniq sorted.txt 
+ls -l
+ls -l > lsout.txt
+cat lsout.txt 
+ls
+wc < course.txt 
+wc < course.txt > wc.txt
+cat wc.txt 
+cat course.txt 
+ls -W
+ls -W 2> lserr.txt
+cta lserr.txt 
+cat lserr.txt 
+wc < course.txt 1> wc.txt
+sort numbers.txt 
+sort numbers.txt | uniq
+head -7 numbers.txt | tail -4
+echo "Hello    DAC"
+echo "Hello    DAC" | tr -s " "
+echo "Hello    DAC" | tr -s "l"
+echo "Hello DAC" | tr " " "@" 
+echo "Hello DAC" | tr "a-z" "A-Z" 
+echo "Hello DAC" | tr "A-Z" "a-z" 
+cat course.txt 
+cat course.txt | tr "a-z" "A-Z"
+cat course.txt | tr "a-z" "A-Z" | wc
+cat > subjects.txt
+cat subjects.txt
+cat subjects.txt | cut -d " " -f1
+cat subjects.txt | cut -d " " -f2
+cat subjects.txt | cut -d " " -f3
+cat subjects.txt | cut -d " " -f1,2
+cat subjects.txt | cut -d " " -f1,2,4
+cat subjects.txt | cut -d " " -f2,1
+cat subjects.txt | cut -d " " -f
+find -name "hello.txt"
+find ~ -name "hello.txt"
+find ~ -name "hello.c"
+find -type f
+find -type d
+man grep
+cat > taste.txt
+cat taste.txt
+grep "good" taste.txt 
+grep "cake" taste.txt 
+grep "is" taste.txt 
+grep -n "is" taste.txt 
+grep -c "is" taste.txt 
+grep -w "is" taste.txt 
+grep -v "is" taste.txt 
+grep -i "Is" taste.txt 
+grep "^is" taste.txt 
+grep "is$" taste.txt 
+grep "^is$" taste.txt 
+cat > select.txt
+grep "dac" select.txt 
+grep "d[aiu]c" select.txt 
+grep "d[^aiu]c" select.txt 
+grep "d.c" select.txt 
+grep "d*c" select.txt 
+grep "d[*]c" select.txt 
+grep "d\*c" select.txt 
+grep -F "d*c" select.txt 
+fgrep "d*c" select.txt 
+cat > repeat.txt
+cat repeat.txt
+grep "dac" repeat.txt 
+grep -E "da?c" repeat.txt 
+grep -E "da+c" repeat.txt 
+grep -E "da{4}c" repeat.txt 
+egrep "da{4}c" repeat.txt 
+egrep "da{4,}c" repeat.txt 
+egrep "da{,4}c" repeat.txt 
+egrep "da{2,4}c" repeat.txt 
+egrep "d[a]c" repeat.txt 
+egrep "d[aa]c" repeat.txt 
+egrep "d(aa)c" repeat.txt 
+egrep "d(aa){2}c" repeat.txt 

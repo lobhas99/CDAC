@@ -1,0 +1,10 @@
+sudo apt update
+
+sudo apt install build-essential
+
+gcc --version
+
+g++ --version
+
+Next step is to download vsCode from ubuntu snapstore.
+

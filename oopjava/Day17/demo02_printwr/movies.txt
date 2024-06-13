@@ -1,0 +1,6 @@
+|   Id|Rating|Title                         |
+|    1|   8.5|Lord of Rings                 |
+|    2|   7.5|Harry Potter                  |
+|    3|   9.0|Forrest Gump                  |
+|    4|   6.0|Bruce Almighty                |
+|    5|   8.0|Mission Impossible            |

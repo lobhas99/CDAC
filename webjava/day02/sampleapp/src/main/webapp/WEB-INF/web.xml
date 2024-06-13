@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>sampleapp</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>DMC</servlet-name>
+  	<servlet-class>com.sunbeam.DmcServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>DMC</servlet-name>
+  	<url-pattern>/dmc</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>DESD</servlet-name>
+  	<servlet-class>com.sunbeam.DesdServlet</servlet-class>
+  	<init-param>
+  		<param-name>course-description</param-name>
+  		<param-value>PG Diploma course in Embedded System Design</param-value>
+  	</init-param>
+  	<init-param>
+  		<param-name>color</param-name>
+  		<param-value>pink</param-value>
+  	</init-param>
+  	<!-- JDBC config info i.e. driver, url, user, password -->
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>DESD</servlet-name>
+  	<url-pattern>/desd</url-pattern>
+  </servlet-mapping>
+</web-app>
+

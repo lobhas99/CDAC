@@ -1,0 +1,7 @@
+Day 5
+1. import day5.1 , into your existing workspace , to revise basic JSP syntax
+1.1 Run it with and without cookies
+
+2. Solve JSP assignment.
+2.1 Basic JSP assignment with Request Dispatching
+2.2 Student admission assignment (w/o DB)

@@ -1,0 +1,269 @@
+
+Revise 
+one-many bi dir association between Team n Player , with annotations
+Discuss Add Player part (Hints only !)
+Cleaning instructions
+
+New Topics
+Solutions to LazyInitializationException
+one-one bi dir n uni dir association mapping
+many-many assciation
+Entity vs Value Types
+Composite types n Collection
+Maven overview
+
+
+
+Revise
+1. one-many bi dir association between Team n Player
+Team : one , parent , non owning(inverse)
+Player : many , child , owning(contains FK)
+
+
+Team POJO : name , abbreviation ....
+@OneToMany(mappedBy="myTeam",cascade=CascadeType.ALL,orphanRemoval=true)
++ private List<Player> players=new AL<>();
+
+
+Player : 
+name,dob....
+@ManyToOne
+@JoinColumn(name="team_id",nullable=false)
++private Team myTeam;
+
+
+
+Discuss Add Player part (Hints only !)
+After submitting the form
+i/p : teamId , player details
+JSP --> <jsp:setProperty> --> B.L (${sessionScope.player_bean.validateAddPlayer()})
+
+PlayerBean --
+Dependency : PlayerDao, TeamDao
+
+B.L method
+validate player details --
+1. get team details from it's id
+invoke team dao's method
+validate player details with team's requirements
+
+2. in case of valid details , 
+create transient player
+invoke player dao' method
+i/p : team Id ,transient player
+3. PlayerDao
+session.get(...) --> team
+team.addPlayer(player);
+commit.
+
+2. Can you configure above bi dir asso ,  as uni dir asso ? YES !
+If yes how ?
+Project Tip : 
+Never configure uni dir one ---> many (since hibernate performs lot of extra queries for especially delete operations)
+
+Either use one <---> many bi dir (already discussed above) OR
+use many ----> one uni dir association.
+
+Team : .....+
+NO additional props
+
+Player : 
+@ManyToOne
+@JoinColumn(name="team_id",nullable=false)
+private Team myTeam;
+g/s
+
+eg : In a uni dir asso , how will you display all the players from a team , specified it's name ?
+jpql = "select p from Player p where p.myTeam.name=:nm";
+
+Continue to LazyInitializationException
+
+1. Try to access department details , using it's name
+Print department details n it's emp details .
+
+What will happen ? Hibernate throws : LazyInitializationException
+
+WHY ? 
+default fetch type for JPA/Hibernate
+Any--Many : LAZY
+Any-one : EAGER
+
+When will hibernate throw org.hibernate.LazyInitializationException ?
+Any time you are trying to access un-fetched data from DB(represented by a proxy) , in a detached manner(outside the session scope)
+
+Triggers for LazyInitExc  : one-to-many
+many-many
+session's load method
+
+
+Solutions
+1.1 Change the fetching policy of hibernate for one-to-many to : EAGER
+eg : 
+@OneToMany(mappedBy = "dept",cascade = CascadeType.ALL,orphanRemoval=true,fetch=FetchType.EAGER)  
+	private List<Employee> emps=new ArrayList<>();
+
+Is it recommneded soln : NO (since even if you just want to access one side details , hib will fire query on many side) --will lead to worst performance.
+Use Case : when the size of many is small 
+
+OR
+1.2
+ @OneToMany(mappedBy = "dept",cascade = CascadeType.ALL)
+	private List<Employee> emps=new ArrayList<>();
+Solution : Simply access the size of the collection within session scope :  This soln will be applied in DAO layer
+Dis Adv : Hibernate fires multiple queries to get the complete details
+
+OR 
+1.3 Most recommended soln to avoid select n+1 issue : 
+How to fetch the complete details , in a single join query ?
+Using "join fetch" keyword in JPQL
+String jpql = "select d from Department d  join fetch d.empList where d.deptName=:nm";
+empList : Prop name ,as it appears in Department POJO
+Hibernate will fire SINGLE INNER JOIN  query to fetch dept + emps  details (not resulting in LazyInitializationException)	
+
+
+2. Another trigger for lazy init exception 
+: Session's API 
+load.
+
+Objective 
+Get Emp details by id
+Use : session API load n understand get vs load.
+Session API
+public <T> T load(Class<T> class,Serializable id)
+T : entity type
+
+Use case :
+In a uni dir asso(Player -->Team)
+While adding player to the team ,
+use session.load instead of session.get (to avoid select query)
+then invoke 
+player.setMyTeam(team);
+commit.
+
+
+3. Objective :  get all departments (lab work !)
+Hint : first use fetch : EAGER  --> (select n+1)  --> to optimize ---> join fetch
+Problem n solutions
+
+4. Proceed to one-to-one 
+(Refer : JPA Entity Association Mappings)
+
+4.1 How will you configure a bi dir one to one association between Emp n Address
+Emp 1<----->1 Address
+Identify the terms
+
+Emp : one ,parent , inverse
+Address : one,child,owning
+
+Which additional property in Emp class ?
+.....+
+//inverse
+@OneToOne(mappedBy="myEmp",cascade=CascadeType.ALL,orphanRemoval=true)
+private Address empAddress;
+add getter n setter
+
+
+//additional helper methods in Employee class : yes (bi dir)
+addAddress n removeAddress
+
+Which additional property in Address  class ?
+city,state...
+//owning
+@OneToOne
+@JoinColumn(name="emp_id",nullable=false)
++ private Employee myEmp;
+add getter n setter
+
+
+
+Solve this
+Get emp details by email 
+eg : jpql=select e from Employee e where e.email=:email
+Employee emp=.....
+tx.commit();
+return emp --> to the tester.
+
+In the tester :
+sop(emp);
+sop(emp.getEmpAddress());
+What will happen ? 
+Any exception or o/p ?
+
+
+What if : user needs ONLY emp details ?
+
+4.2 Identify limitations of above approach n if required use "Shared PK approach"
+
+Employee 1<-----1 Address association mapping
+Desc : Uni dir one to one mapping between Emp n Address (USING Shared PK approach)
+
+
+Next objectives : (Lab work)
+1. Assign emp address
+i/p : emp id n address details
+
+Which DAO ? : Address Dao :
+String assignEmpAdreess(Long empId,Address adr);
+
+Steps 
+get emp from it's id : session.get/load
+emp=....
+adr.setMyEmp(emp);
+session.persist(adr);
+commit;
+
+
+2. Display emp address (lab work)
+i/p : emp id
+
+
+3. Display all emp details from specified city
+i/p : city
+jpql : select a.myEmp from Addres a where a.city=:city
+
+
+
+
+(Refer : JPA Entity Association Mappings)
+
+5. Employee *<------>* Project association mapping
+
+Employee : many, parent,inverse
+Project : many , parent , owning (side containing info about the link)
+child table : link table (pivot / asso table / join table) : required : YES
+
+Note  : association can be reversed (Emp : owning n Project : inverse)
+
+How many  enitity classes 
+2 
+n how many tables ? 3
+
+
+Discuss n configure it completely.
+
+
+
+
+6.Till Now , we were looking at association(HAS-A) relationship between multiple entities.
+Entities have a standalone existence(typically a separate table) , it's own PK.
+It's life cycle(transient, persistent,detached,removed) is independent of any other entity
+
+So this represents : weak association (aggregation)
+
+Can there be a strong association between hibernate managed POJOs ? YES
+
+ Enter value types
+
+6.1 Employee HAS-A Adhar Card : demo of entity n value type (composite)
+
+6.2 Employee HAS-A PaymentOption (can have multiple credit/debit cards) : Collection of embeddable
+
+6.3 Employee HAS-A Skill : string (can have multiple skills eg : java,python,react...)
+: collection of basic value type
+
+
+7. Maven overview
+
+
+
+

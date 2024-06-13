@@ -1,0 +1,155 @@
+Spring Data JPA Links (Bookmark them!)
+1. API Docs : https://docs.spring.io/spring-data/jpa/docs/2.7.14/api/
+2. Ref docs : https://docs.spring.io/spring-data/jpa/docs/2.7.14/reference/html/
+
+
+Today's Topics
+Understand Transaction management internals
+Revise java.util.Optional<T> class n it's methods
+Revise Spring Boot MVC , using Spring Data JPA (using complete code walk through)
+Complete Update Emp n add Emp functionality
+Discuss Lab work
+Spring Data JPA practice
+Lombok annotations 
+Spring Boot testing 
+Enter REST (Introduction)
+
+---------------------------------
+
+
+Understand Transaction management internals
+
+Objectives 
+1. Update Emp details
+2. Add new emp to existing department (using form binding technique : data binding)
+
+Steps
+2.1 Add a link in emp list page
+2.2 Add new method
+GET , forward the clnt to JSP
+2.3 views/emps/add.jsp
+HTML form 
+method =POST ,action=""
+2.4 /employees/add , @PostMapping
+
+Steps in Data / form binding
+1. In show form phase ,
+ add POJO as method arg , as a dependency (@ModelAttribute)
+2. In view layer(JSP)
+import spring supplied form tag library (for data binding)n use the tags
+3. In the process form phase
+@PostMapping
+add POJO as method arg , as a dependency (@ModelAttribute)
+
+
+
+
+Lab Objectives
+Add Login page
+Link Adhaar Card Details
+Assign Emp address.
+Display all emps by specified city.
+AddressDao
+List<Address> findByCity(String city);
+
+OR
+@Query("select a.emp from Address a where a.city=:ci")
+List<Emp> findByCity(@Param("ci")String city);
+
+
+------------------------------
+0. Tx management internals
+
+1. Revise java.util.Optional<T> class n it's methods
+
+Method of Optional class :
+public  T orElseThrow​(Supplier exceptionSupplier) 
+T : type of the value
+
+If a value is present, returns the value, otherwise throws an exception produced by the exception supplying function.
+
+1.1 How will you use it with Spring Data JPA API ?
+eg : 1. Get emp details by it's ID
+Create un checked exception class :
+public class ResourceNotFoundExc extends RuntimeException
+{...}
+
+EmpDao extends JpaRepository<Emp,Long>
+{}
+Uses inherited method
+In EmpService : 
+@AutoWired 
+private EmpDao dao;
+
+public Emp getEmpDetails(Long empId)
+{
+  return dao.findById(empId).orElseThrow(() -> new ResourceNotFoundExc(....));
+}
+
+2. Solve : User sign in
+eg : public interface UserRepository extends JpaRepository<User,Long>
+{
+   ????
+} 
+
+How will you invoke it from  UserServiceImpl ?
+????
+
+2. Revise HttpServletResponse sendRedirect
+What will happen , if you call from LoginServlet , 
+response.sendRedirect(response.encodeRedirectURL("candidate_list"));
+
+3. Same is achieved in Spring MVC controller , by
+"redirect:/emps/list?deptId=" + deptId
+
+4. Install Lombok 
+
+To reduce boilerplate code from the entities Layer , add Lombok annotations
+
+Ref : https://www.baeldung.com/intro-to-project-lombok
+
+What is Lombok ?
+It's helper 3rd party library , to reduce boilerplate code from java classes(mainly form POJO layer)  , using annotations
+Steps 
+1. Add lombok dependency, during creation of spring boot project.
+2. Install Lombok library , to IDE location.
+3. Use class level annotations
+eg : @NoArgsConstructor , @AllArgsConstructor, @RequiredArgsConstructor
+@Getter
+@Setter
+@ToString(exclude = ...,callSuper = true)
+@Data n many more
+
+Steps 
+1. Add lombok dependency : pom.xml (already done !)
+2. install lombok jar , from 
+<home dir> \.m2\repository\org\projectlombok\lombok\1.18.30
+OR open terminal/cmd prompt
+java -jar lombok-1.18.30.jar
+Specify location : IDE (STS : IDE app)
+2.5 Maven force update +  cleaning steps
+3. use annotations.
+
+To Locate IDE installation : 
+From STS IDE  --Help --Installation Details -- Configuration
+eg : C:\sts-bundle\sts-3.9.18.RELEASE\STS.exe 
+n Install Lombok JAR.
+
+
+5. Enter Spring boot testing
+Refer : Spring boot testing.txt
+
+Write test case for Spring Data JPA Practice
+Spring Data JPA Practice
+Display all emp details , joined between a date range
+Display all emp details , containing specified keyword in their last name
+Display all emp details , drawing salary >= specific salary
+Display top 2 salaried emps
+Delete all emps from specified dept (id or name , any unique criteria)
+
+---------------------------Monolithic web app over-------------------------
+
+6. Enter Spring Boot REST 
+Refer : "day14-data\day14_help\Spring Boot REST Steps.txt"
+
+

@@ -1,0 +1,46 @@
+﻿@model List<_001DemoCoreMVC.Models.Emp>
+
+<html>
+    <head>
+        <title>Demo</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    </head>
+    <body>
+       <div class="container">
+           <a href="/Home/Create">Add New Record</a>    
+           <br />
+            <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Edit</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var emp in Model)
+                    {
+                        <tr>
+                            <td>@emp.No</td>
+                            <td>@emp.Name</td>
+                            <td>@emp.Address</td>
+                            <td>
+                                <a href="/Home/Edit/@emp.No">Edit</a>
+                            </td>
+                            <td>
+                                <a  href="/Home/Delete/@emp.No">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
+       </div>
+    </body>
+</html>

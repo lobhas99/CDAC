@@ -1,0 +1,15 @@
+Student Admission Assignment help
+public class Student {
+//firstName ....+admissionStatus:boolean
+private Course selectedCourse;
+....
+}
+public enum Course {
+  JAVA(80),MERN(82),DBT(75);
+private int minMarks;
+  private Course(int minMarks)
+  {
+    this.minMarks=minMarks;
+  }
+  //add a getter
+}

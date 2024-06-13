@@ -1,0 +1,227 @@
+Today's  Topics
+Revise 
+Spring validations n global exception handling
+ResponseEntity
+
+New Topics
+Spring boot internal working
+Logging Framework
+Spring Boot AOP
+Inheritance in JPA / Hibernate
+Enter Spring Security
+
+1. How will you add server side validations for 
+Steps :
+add dependency : spring boot validation stater
+
+1.1 Request Body
+eg : Appointment DTO . User DTO ....
+DTO : props
+@NotBlank , @NotNull , @Pattern, @Min,@Max, @Range, @Length.....
+@RequestBody + @Valid : req body : method arg of POST/PUT/PATCH
+Exc raised : MethodArgNotValidExc
+1.2 path variables 
+1.3 request params 
+
+@Validated : class level annotation
+@NotBlank , @NotNull , @Pattern, @Min,@Max, @Range, @Length....
+on req params or path vars
+Exc raised :  ConstraintViolationExc
+
+1.4 Why do we need to add centralized(Global) exc handling ?
+In absence of custom exc handler , Spring boot supplies wioth def exc handler
+--> sends JSON error object : timestamp , error code , err mesg ,err stack trace to the clnt !!!
+If the exc : B.L failures (service layer excs) --try- catch block --too many try catch blcoks in Rest controller methods
+
+Such a try-catch block CAN NOT handle : validation failures 
+
+Soln : add custom (global) exc handler
+
+How will you add it ?
+1. Add class level anno
+@ControllerAdvice / @RestControllerAdvice
+=> Spring bean containing common advice .
+This exc handler is supplying a common advice to all REST controllers -- 
+not to add exc handling logic separately BUT add it ONLY in this class.
+
+2. Add method level annotation per exc handling method/s
+eg : ResourceNotFoundExc
+@ExceptionHandler(ResourceNotFoundException.class)
+public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e)
+{
+ return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage()));
+}
+
+
+1.5 Revise ResponseEntity
+o.s.http.ResponseEntity<T>  : generic class
+T : type of the response body
+It represents an ENTIRE response packet , consisting of 
+response status code | Header/s | Resp body
+
+Ctor : ResponseEntity(T body, HttpStatus status);
+HttpStatus : enum containing Resp status codes
+
+OR Methods
+ResponseEntity.status(HttpStatus status).body(T body)
+
+
+1.6 What is pagination ?
+Dividing larger no of results (eg : products , users, reviews , blogs ...) into fixed size pages/slices.
+
+How will you add it's support ?
+
+Steps 
+ The Dao i/fs extends from JpaRepository ----> PagingAndSortingRepository -->CrudRepository --> Repository
+
+PagingAndSortingRepository Methods
+package : o.s.data.repository
+1. 
+Page<T> findAll(Pageable pageable)
+Returns a Page of entities meeting the paging restriction provided in the Pageable object.
+
+i/p : Pageable : i/f for pagination
+Implementation class : PageRequest
+
+2. Method of PageRequest class 
+public static PageRequest of(int pageNumber,int pageSize)
+Creates a new unsorted PageRequest.
+Parameters:
+pageNumber - zero-based page number
+pageSize - the size of the page to be returned(>0)
+
+3. Page<T> : i/f 
+It's inherited method for Slice<T>
+List<T> getContent()
+Returns the page content as List.
+T : type of the entity
+
+
+2. Spring boot internals 
+refer : readme
+
+
+
+5. 
+Logging framework in Java
+Refer : "day17_help\Regarding logging framework in Java.txt"
+Spring Boot AOP 
+
+Objective  If you want to intercept all the requests sent to this application n maintain a server side log , how will you do it ?
+
+Refer : "day17_help\AOP\readme_aop.txt"
+
+
+
+6. Inheritance in JPA / Hibernate
+
+
+7. Enter Spring security
+
+
+Understand spring security architecture
+1."day17_help\spring security\regarding spring security.txt"
+2."day17_help\spring security\diagrams\spring security architecture.jpeg"
+3."day17_help\spring security\diagrams\Ultimate Details of Spring Security Architecture.png"
+4."day17_help\spring security\Spring Security Flow.txt"
+5. import "spring_boot_backend_security_jwt_template" , in your workspace.
+(It will download spring security related dependencies)
+
+Steps
+1. Create spring boot application , w/o adding spring security dependencies
+Try to access some end points (eg : view products , add / delete products ..)
+Observation : all end points were un protected !
+
+2. Add spring security starter dependency in pom.xml , update maven project
+Observations
+2.1  : All end points are automatically PROTECTED (SECURED)
+i.e entire web app is under a lock (authentication lock).
+Un authenticated user CAN NOT access any of the APIs.
+2.2 It supplies def user name : user
+generate 128 bit randomly generated password on server console 
+You can test it using a browser. It will give you a ready made signin n signout form
+Understand this : By def spring security offers : form login n also authentication mechanism = Basic Authentication.
+
+What is Basic Authentication scheme of HTTP?
+
+1. Any time clnt sends a req to protected resource --spring sec uses by default : basic auth
+Server sends resp header : WWW-Autheticate --- Basic 
+2. clnt has to send username:password --- base64 encoding
+auto sent by postman , using Basic Authentication scheme.
+3. Continue to in mem based authentication(InMemory User Details)
+Ref eclipse project : 
+
+4. Replace it by DB based authentication (DB based  User Details , accessed using JPA)
+Ref eclipse project : 
+
+5. Continue to JWT based authentication
+(Replace Basic Authentication scheme by JWT based authentication)
+For the understanding of JWT n steps , 
+Refer : "day17_help\spring security\JWT\JWT Details.txt"
+Refer : "day17_help\spring security\JWT\JWT Steps Upgraded.txt"
+Ref eclipse project : day17.3
+Edit DB properties .
+Run the test class : src\test\java\com\app\repository\UserEntityRepositoryTest.java
+It will create 3 different users  with 3 different type of roles.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2. Lost Update problem n solution
+
+"day14-data\day14_help\transactions\readmes\regarding transactions_locking.txt"
+n diagrams
+
+3. Microservices demo (Using RestTemplate)
+Refer : 
+"day17_help\Spring boot microservices\regarding microservices demo.txt"
+
+
+
+
+How will you test from postman ?
+1. URL : http://localhost:8080/products/view
+NO authentication required , you should get SC 200 , since it's permit all.
+2. URL : http://localhost:8080/products/purchase
+SC 401 , Authentication required n customer role is mandatory.
+3. First authenticate (In the project , refer to : UserAuthController)
+URL : http://localhost:8080/users/signin , method = POST , Body --raw --json 
+{
+"email" : "a2@gmail.com",
+"password" : "2345"
+}
+These are the correct credentials for the customer role.
+
+In the response , SC 200 n in the resp body , you will get this
+{
+    "jwt": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhMkBnbWFpbC5jb20iLCJpYXQiOjE3MDE3OTI4MzgsImV4cCI6MTcwMTg3OTIzOCwiYXV0aG9yaXRpZXMiOiJST0xFX0NVU1RPTUVSIn0.3XzhKJ0WPkra5b4-BkOfA7rbXWHSgzOcO_MDDJOdyplESTGcG6FMCfXwzvs6Qa5ao7PUQ8dCxQazbHUQzeKxhQ",
+    "mesg": "User authentication success!!!"
+}
+The value of JWT may differ.
+
+
+4. Now for accessing the secured end point , 
+URL : URL : http://localhost:8080/products/purchase , method=GET
+Instead of choosing "Basic Auth" , choose "Bearer Token" , from Auth 
+n paste the JWT(Json web token)
+You should get : SC 200 
+Resp body : customer should be able to purchase products
+
+5. Similarly , you can test other endpoints.
+
+
+javatechie : you tube channel
+spring boot interview question
+
+
+

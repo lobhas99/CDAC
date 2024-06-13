@@ -1,0 +1,14 @@
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\bin\Debug\net6.0\08DemoDelegates.exe
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\bin\Debug\net6.0\08DemoDelegates.deps.json
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\bin\Debug\net6.0\08DemoDelegates.runtimeconfig.json
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\bin\Debug\net6.0\08DemoDelegates.dll
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\bin\Debug\net6.0\08DemoDelegates.pdb
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\obj\Debug\net6.0\08DemoDelegates.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\obj\Debug\net6.0\08DemoDelegates.AssemblyInfoInputs.cache
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\obj\Debug\net6.0\08DemoDelegates.AssemblyInfo.cs
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\obj\Debug\net6.0\08DemoDelegates.csproj.CoreCompileInputs.cache
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\obj\Debug\net6.0\08DemoDelegates.dll
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\obj\Debug\net6.0\refint\08DemoDelegates.dll
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\obj\Debug\net6.0\08DemoDelegates.pdb
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\obj\Debug\net6.0\08DemoDelegates.genruntimeconfig.cache
+C:\Users\Admin\OneDrive\Desktop\DAC\DotNetDemos\Day04\Demos\08DemoDelegates\obj\Debug\net6.0\ref\08DemoDelegates.dll

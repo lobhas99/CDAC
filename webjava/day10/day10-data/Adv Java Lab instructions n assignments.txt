@@ -1,0 +1,158 @@
+Day 5
+1. import day5.1 , into your existing workspace , to revise basic JSP syntax
+1.1 Run it with and without cookies
+
+2. Solve JSP assignment.
+2.1 Basic JSP assignment with Request Dispatching(forward)
+2.2 Student admission assignment (w/o DB)
+
+
+Day 6
+1. import day6.1 ,  into your existing workspace , to revise  (visit the links from index.jsp)
+1.1 Error Handling in JSP
+1.2 JSP standard actions : forward , include , param
+
+2. import day6.2 ,  into your existing workspace , to revise : JSP -JavaBean --DAO --POJO --DB
+layers
+
+3. With lab faculty help (They will give detailed instructions)
+MUST import test_hibernat_basic , in your workspace.
+This will download hibernate dependencies , which will required on Monday.
+
+4. Hands on :
+Continue with day6.2.
+In login.jsp , add a link for new voter registration.
+
+4.1 Render voter registration form (voter_registration.jsp)
+4.2 Submit the form to process_reg.jsp
+Using Java Bean , perform the validation
+Voter age > 21. 
+In case of successful validation , User Bean should call User dao's method to insert a record.
+
+4.3 Display registration status from JSP.
+
+
+Day 7
+1. import test_hibernate_basic in your workspace (if not done already) n download hibernate dependencies.
+
+Hands on 
+2. Refer to "day7-data\day7_help\IPL sql.txt"
+Refer to teams table .
+WE will create a standalone demo to create n insert teams records.
+
+3. Complete Voter registration
+
+4. If already done , start with voter flow.
+
+
+Day 8
+
+1. Copy day8_hibernate project in your workspace. Import it as existing Maven Project
+Edit DB password , from hibernate.cfg.xml
+1.1 Open com.app.tester
+Go through the testers , to revise today's work.
+You can go through Tester n trace DAO method invocations
+
+2. Hands on
+
+2.1 Continue with day7_lab (where you already have Team POJO n DAO)
+Insert some IPL teams (using AddNewTeam tester)
+
+Solve these objectives
+1. Display  team id n abbreviation of all the teams
+ no inputs required
+
+
+2. Display team detailsby specified team id
+i/p : team id
+o/p : team details or null
+
+3. Display all those teams who need , player's max age < specific age n min no of wickets taken > specified wickets. Sort the results as per desc order of max age
+i/p : age , no of wickets
+
+4. Update max age n batting avg requirement of a specific team by it's name (team name is unique)
+i/p team name , new max age n batting avg
+
+
+5. Delete team details
+i/p : team id
+
+
+Day 9
+1. Integrate hibernate in a web app n start with IPL assignment
+
+
+Day 10
+0.Continue with day9_lab work.
+
+1. We will first complete IPL assignment n then revise
+1.1 What is already completed on Day 9?
+Lifted team id n abbreviations of all teams from Team Dao layer --> sent it to Java Bean (TeamBean)--> sent it to JSP --> add_player_form.jsp
+Displayed it using dyn drop down list in a form.
+eg : 
+${sessionScope.team_bean.teamDetails}
+
+
+1.2 User will choose a team , fill up player details n submit the form.
+URL ---> http://host:port/ctx_path/process_form.jsp
+
+What will be the next step ?
+
+In process_form.jsp :
+1.3 Create instance of  Player bean , <jsp:useBean> n store under session scope. (OR still better create TeamBean n  PlayerBean instance in index.jsp itself)
+1.4 Invoke matching setters
+<jsp:setProperty>
+1.5 Invoke PlayerBean's B.L method to validate n insert player details
+eg : ${sessionScope.player.validateAndAddPlayer()}
+
+2. In Player Bean : 
+2.1 props : teamId : int ,fn,ln:string,dob:String,avg:double,wickets:int
++ PlayerDao , TeamDao
+2.2 Bean Def ctor : create player dao instance , team dao instance
+
+2.3 generate getters n setters
+
+2.4 Add B.L method for validation n insertion
+public String validateAndPlayer()
+{
+ 1. Get team details from team id : simply call team dao's method n get team details
+Team chosenTeam=teamDao.getTeamDetails(teamId);
+2. validations 
+LocalDate date=....
+  int age=Period.between(date,LocalDate.now()).getYears();
+  batting avg 
+  wickets taken 
+  In case of no validation errs : 
+  simply call PlayerDao 's method to insert new player's details 
+  method args : teamId , transient player object ref.
+  rets : message
+}
+
+
+3. Team Dao 
+Team getSelectedTeamDetails(Integer teamId)
+Hint : session.get(...)
+
+4. PlayerDao
+String addPlayerDetails(Integer teamId,Player newPlayer)
+Hint : session.get(...) --> Team --null --ret failure mesg
+team.addPlayer(player) 
+commit
+
+2. Copy n import day10.1 in your workspace , as existing Maven project.
+
+It has a demo of all E-Rs n also Entity-value Types.
+It will be extremely confusing if you try to revise all of it on the same day.
+So here's a suggestion.
+
+Revise :  one to one mapping (uni dir shared PK approach)
+n try to solve this.
+1. Assign emp address
+i/p : emp id n address details
+
+2. Display emp address (lab work)
+i/p : emp id
+
+3. Display all emp details from specified city
+i/p : city
+

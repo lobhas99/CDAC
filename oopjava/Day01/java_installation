@@ -1,0 +1,8 @@
+sudo apt-get update
+
+sudo apt-get install openjdk-11-jdk
+
+java --version
+
+Download STS 3 for Linux from below link ->
+https://download.springsource.com/release/STS/3.9.18.RELEASE/dist/e4.21/spring-tool-suite-3.9.18.RELEASE-e4.21.0-linux-gtk-x86_64.tar.gz

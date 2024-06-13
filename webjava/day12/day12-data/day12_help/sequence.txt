@@ -1,0 +1,113 @@
+Today's topics
+
+Revision of 
+Spring Beans life cycle
+D.I using explicit wiring
+
+Then Enter 
+Auto wiring
+Hybrid approach (lesser xml + majority annotations)
+Java config class + annotations
+Spring MVC
+
+-------------------------
+1. Spring bean life cycle (refer to a diagram)
+
+2. Different Modes of Wiring (D.I.) : (refer to a diagram)
+
+3. Enter auto wiring 
+autowire=no(default:explicit wiring)|byName|byType|constructor
+
+
+4. Hybrid Approach (reduced XML , reduced Java code  n majority annotations)
+(refer to readme : "spring sequence for annotations")
+
+eg : UserController : dependency : UserService : i/f  , (UserServiceImpl) : impl class
+
+@AutoWired //=> autowire=byType
+private UserService myUserService;
+What if : SC comes across multiple matches :
+What if : SC doesn't find even a single match : 
+
+eg : UserController : dependency : UserService : i/f  , (UserServiceImpl) : impl class
+@AutoWired (required=false) //=> autowire=byType
+private UserService myUserService;
+What if : SC comes across multiple matches : 
+What if : SC doesn't find even a single match : 
+
+
+
+eg : UserController : dependency : UserService : i/f  , (UserServiceImpl) : impl class
+@AutoWired 
+@Qualifier("abc") //=> autowire=byName
+private UserService myUserService;
+What if : SC comes across exactly 1 match :
+What if : SC comes across multiple matches : 
+What if : SC doesn't find even a single match : 
+
+OR
+
+@Resource(name="abc") //=> autowire=byName (Java EE annotation)
+private UserService myUserService;
+
+
+
+5. Modern way of supplying meta data instructions to SC 
+Java Config class/es + annotations
+5.1 How to tell SC , following class containg java config 
+@Configuration : class level mandatory annotation (It will auto enable anno support)
+(equivalent to context:annotation-config)
+
+5.2 <context:component-scan.../>
+@ComponentScan(String[] basePkgNames)
+
+5.3 To configure Java objects as spring beans --one way is supplying annos : eg --@Component,@Controller,@Service.....
+OR
+@Bean =><bean id ,class ...../>
+
+5.4 Instead of starting xml based SC , use 
+BeanFactory <---- ApplicationContext <---- AnnotationConfigApplicationContext ,
+ to boot SC using java config class + annotations
+
+-----------------------Enter MVC-------------------------------
+
+What is MVC ?
+Model-View-Controller --Standard design pattern , meant for separation of concerns(=tasks=responsibilities)
+
+Custom implementation of the MVC pattern : 
+Model -- Java Bean (conversational state holder + B.L supplier) & POJOs
+
+View layer --JSP , Thymeleaf/velocity/Angular/React/Vue/Next JS
+Represents UI / presentation logic  (processing requests & generating response)
+
+Controller -- Typically a servlet(used in Spring MVC ) or a filter(used in Struts 2 framework)
+Manages navigation(routing)  & beans.
+
+Front Controller -- Additional design pattern -- which ensures ANY request coming from ANY client , for this web app , will be intercepted by a common gate keeper(or a centralized dispatcher)
+It will dispatch clnt request to further components , based upon nature of the req.
+
+MVC flow (without spring)
+
+refer : MVC diagrams , MVC Details
+mvc-overview.png
+
+ 
+Implementation using servlet / JSP & JavaBean  --Shared as a readymade demo.
+Refer to : eclipse projects\mvc_hibernate_demo
+Flow  diagram : mvc-flow.png
+
+Enter Spring MVC
+(Refer : "day12-data\day12_help\Spring MVC\steps for spring mvc.txt")
+
+Objectives
+1. Test Spring MVC Flow
+2. Deliver/render the index.jsp from SC (using spring MVC architecture)
+3. Test Model n View
+4. Test Model Map
+5. Enter Case study (EMS) 
+5.1 List All Departments
+(Attach data to a drop drown list)
+5.2 Allow user to choose a dept
+5.3 Display all emps from a chosen dept.
+
+

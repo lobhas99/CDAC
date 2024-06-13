@@ -1,0 +1,39 @@
+List of important configurations in web.xml
+
+1 Configure Custom Error Page/s
+<error-page>
+		<!-- <error-code></error-code> -->
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/err_handler.jsp</location>
+</error-page>
+
+2. Configure SSL
+
+3. Session coookie (i.e. JSESSIONID) can be vulnerable to session hijacking attacks. To prevent this, cookies can be created with the "Secure" flag, which ensures that the browser will never transmit the specified cookie over non-SSL.
+<session-config>
+  <cookie-config>
+    <secure>true</secure>
+  </cookie-config>
+</session-config>
+
+4. Use the HttpOnly Flag
+Cookies can be created with the "HttpOnly" flag, which ensures that the cookie cannot be accessed via client side scripts. This helps to avoid  some of the most common XSS(cross site scripting) attacks. 
+<session-config>
+  <cookie-config>
+    <http-only>true</http-only>
+  </cookie-config>
+</session-config>
+
+5. Do not Using URL Parameters for Session Tracking
+The "<tracking-mode>" element in the Servlet 3.0 specification allows you to define whether the JSESSIONID should be stored in a cookie or in a URL parameter. If the session id is stored in a URL parameter it could be  saved in  browser history, proxy server logs, etc.  Exposing session id makes the application more vulnerable to session hijacking attacks. Instead, make sure the JSESSIONID is stored in a cookie (and has the Secure flag set) using the following configuration:
+
+<session-config>
+  <tracking-mode>COOKIE</tracking-mode>
+</session-config>
+
+6) Setting a Session Timeout
+Users like long lived sessions because they are convenient. Hackers like long lived sessions because it gives them more time to conduct attacks like session hijacking and CSRF.  you You should configure the idle timeout as follows:
+
+<session-config>
+  <session-timeout>15</session-timeout>
+</session-config>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- depnt bean -->
+	<bean id="my_atm" class="dependent.ATMImpl" init-method="myInit"
+		destroy-method="myDestroy" autowire="byType"/>	
+	
+	<!-- config of depcy bean -->
+	<!-- singleton n eager -->
+	<!-- <bean id="test" class="dependency.TestTransport" lazy-init="true" />
+ -->	<!-- singleton n lazy -->
+	<bean id="myTransport" class="dependency.HttpTransport" scope="prototype" />
+	<!-- singleton eager -->
+<!-- 	<bean id="soap" class="dependency.SoapTransport" />
+ -->
+</beans>

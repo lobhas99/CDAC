@@ -1,0 +1,8 @@
+Download SQL Express:
+
+https://www.microsoft.com/en-us/download/details.aspx?id=101064
+
+
+Download SQL Server Management Studio:
+https://go.microsoft.com/fwlink/?linkid=2199013&clcid=0x409
+

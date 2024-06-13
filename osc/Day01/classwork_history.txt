@@ -1,0 +1,83 @@
+ls /
+ls
+ls /
+ls /home/sunbeam
+date
+cal
+cal -y
+cal -y 2020
+man cal
+mkdir demo
+ls
+mkdir one two three four
+ls
+mkdir -p dir1/dir2/dir3/dir4
+ls
+ls -R
+ls
+rmdir demo
+ls
+touch file1.txt
+ls
+stat file1.txt 
+touch file2.txt file3.txt
+ls
+rm file3.txt 
+ls
+rmdir dir1
+ls
+cat > course.txt
+ls
+cat course.txt 
+cat > course.txt
+cat course.txt 
+cat >> course.txt
+cat course.txt 
+cat test.txt
+ls
+cp course.txt copy.txt
+ls
+cat copy.txt 
+cp course.txt one
+ls one/
+ls
+cp one copy
+cp -r one copy
+ls
+ls copy
+ls
+mv file1.txt  f1.txt
+ls
+mv file2.txt  two
+ls
+ls two/
+mv one two
+ls
+ls two/
+ls
+mv two/one .
+ls
+pwd
+cd one/
+pwd
+cd ..
+pwd
+cd ~
+pwd
+cd -
+ls -l
+ls -l /dev
+ls -l
+whoami
+who am i
+tty
+who
+w
+who
+ps
+ps -e
+ps -e -o pid,ppid,cmd
+ls -l
+ps -o
+ps -o pid,ppid,cmd
+history

@@ -1,0 +1,14 @@
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\bin\Debug\net6.0\DemoCore02.exe
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\bin\Debug\net6.0\DemoCore02.deps.json
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\bin\Debug\net6.0\DemoCore02.runtimeconfig.json
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\bin\Debug\net6.0\DemoCore02.dll
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\bin\Debug\net6.0\DemoCore02.pdb
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\obj\Debug\net6.0\DemoCore02.GeneratedMSBuildEditorConfig.editorconfig
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\obj\Debug\net6.0\DemoCore02.AssemblyInfoInputs.cache
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\obj\Debug\net6.0\DemoCore02.AssemblyInfo.cs
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\obj\Debug\net6.0\DemoCore02.csproj.CoreCompileInputs.cache
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\obj\Debug\net6.0\DemoCore02.dll
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\obj\Debug\net6.0\refint\DemoCore02.dll
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\obj\Debug\net6.0\DemoCore02.pdb
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\obj\Debug\net6.0\DemoCore02.genruntimeconfig.cache
+D:\Study Material\CDAC\dotNet\Day02\Demos\DemoCore02\obj\Debug\net6.0\ref\DemoCore02.dll
